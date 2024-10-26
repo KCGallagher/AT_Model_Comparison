@@ -1,0 +1,12 @@
+# Ignore system files
+.DS_Store
+*pycache*
+**/scratch
+**/tmp
+.idea
+*.key
+*.code-workspace
+*.vscode
+
+# Miscellaneous
+**/.ipynb_checkpoints
