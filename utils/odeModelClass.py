@@ -154,7 +154,7 @@ class ODEModel():
         refSize = self.paramDic.get('scaleFactor', 1) * np.sum(
             self.initialStateList) if refSize is None else refSize
         maxTolerableBurden = np.sum(self.initialStateList) * tumourSizeWhenProgressed
-        dose = self.paramDic['DMax']
+        dose = self.paramDic['DMax'] if np.sum(self.initialStateList) > refSize * atThreshold else 0  # Allow zero initial dose
         currCycleId = 0
         if reward_func is not None:
             self.reward = 0
