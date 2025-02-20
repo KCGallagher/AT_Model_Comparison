@@ -145,9 +145,9 @@ class ODEModel():
 
     # =========================================================================================
     # Simulate adaptive therapy (Zhang et al algorithm)
-    def Simulate_AT(self, refSize=None, atThreshold=0.5, atMethod = "Zhang", sigmoidWidth = 50, intervalLength=1.,
-                    t_end=1000, nCycles=np.inf, tumourSizeWhenProgressed=1.2, t_span=None, reward_func=None, 
-                    useRandomInterval=False, noiseFrac=0, solver_kws={}):
+    def Simulate_AT(self, refSize=None, atThreshold=0.5, atMethod = "Zhang", atFunc = None, sigmoidWidth = 50, 
+                    intervalLength=1., t_end=1000, nCycles=np.inf, tumourSizeWhenProgressed=1.2, t_span=None, 
+                    reward_func=None, useRandomInterval=False, noiseFrac=0, solver_kws={}):
         
         t_span = t_span if t_span is not None else (0, t_end)
         currInterval = [t_span[0], t_span[0] + intervalLength]
@@ -187,8 +187,15 @@ class ODEModel():
                 sigmoid = lambda n : 1 / (1 + np.exp(- sigmoidWidth * (n - atThreshold)))
                 norm_size = self.resultsDf.TumourSize.iat[-1] / refSize
                 dose = self.paramDic['DMax'] * np.random.choice(2, 1, p = [1 - sigmoid(norm_size), sigmoid(norm_size)])[0]
+                
+            elif atMethod == "Custom":  # Define function f(df_row, refSize, t) -> dose
+                if atFunc is not None:
+                    dose = atFunc(self.resultsDf.iloc[-1], 
+                                  refSize, currInterval[1]) * self.paramDic['DMax']
+                else:
+                    raise ValueError("No function provided as `atFunc` for method 'Custom'")
             else:
-                raise ValueError("Unknown method '%s', supported methods are 'Zhang', 'Threshold', or 'Sigmoid'" % atMethod)
+                raise ValueError("Unknown method '%s', supported methods are 'Zhang', 'Threshold', 'Sigmoid' or 'Custom'" % atMethod)
             # print(dose, intervalLength)
 
             # Update interval
