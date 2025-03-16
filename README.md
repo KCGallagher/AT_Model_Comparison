@@ -18,3 +18,17 @@ For the susceptible population, this growth rate is also modified by the drug co
 Finally, both species have a natural death rate, of $d_{S}$ and $d_{R}$ respectively.
 
 This model is implemented in the `LotkaVolterraModel` class, which inherits from `ODEModel`. This parent class sets parameters such as error tolerances for the solver, and then solves the ODE model for each treatment period sequentially.
+
+
+## Waning Immunity Model
+
+This is a time-varied generalized Lotka-Volterra model (with growth scaling exponent $\alpha$), with separate drug-sensitive $S$ and drug-resistant $R$ cell populations competing for shared resources. However, the resource overlap descreses exponentially, with the resistance index $\gamma > 0$. 
+
+$$
+\frac{dS}{dt} = r_{S} S \left[1 - \left(\frac{S + \frac{R}{1 + e^{\gamma t}}}{K_{S}}\right)^{\alpha}  - d_{S}D \right], \\\\
+\frac{dR}{dt} = r_{R} R \left[1 - \left(\frac{R + \frac{S}{1 + e^{\gamma t}}}{K_{R}}\right)^{\alpha} - d_{R}D \right]
+$$
+
+Each cell species $i$ has a distinct growth rate $r_{i}$, carrying capacity $K_{i}$ and drug-induced death rate $d_{i}$, while logistic growth accounts for net growth. It is worth noting that this model also reduces to the generalized logistic model in the case where $\gamma = 0$ (eliminating the explicitly time-dependent competition), and in the absence of treatment.
+
+This model is implemented in the `ExponentialModel` class
