@@ -11,7 +11,8 @@ from odeModelClass import ODEModel
 def create_model(modelName,**kwargs):
     funList = {"LotkaVolterraModel":LotkaVolterraModel,
                "CompetitionModel":CompetitionModel,
-               "ExponentialModel":ExponentialModel}
+               "ExponentialModel":ExponentialModel,
+               "StemCellModel":StemCellModel}
     return funList[modelName](**kwargs)
 
 # ======================= Models =======================================
