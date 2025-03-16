@@ -31,4 +31,15 @@ $$
 
 Each cell species $i$ has a distinct growth rate $r_{i}$, carrying capacity $K_{i}$ and drug-induced death rate $d_{i}$, while logistic growth accounts for net growth. It is worth noting that this model also reduces to the generalized logistic model in the case where $\gamma = 0$ (eliminating the explicitly time-dependent competition), and in the absence of treatment.
 
-This model is implemented in the `ExponentialModel` class
+This model is implemented in the `ExponentialModel` class.
+
+## Stem-Cell Model
+
+This model distinguishes between prostate cancer stem-like ($S$) and differentiated ($D$) cells to model the tumor response to treatment. Stem-like cells divide at rate $\lambda$, to produce either two stem-like cells (with probability $p_{s}$, but subject to negative feedback $\frac{S}{S+D}$ from differentiated cells), or a stem-like and a non-stem cell. While stem-like cells are androgen-independent and hence do not respond to treatment, differentiated cells die in response to drug application $T_{x}$ at rate $d_{D}$.
+
+$$
+    \frac{dS}{dt} =  \left(\frac{S}{S+D}\right) p_{S} \lambda S, \\\\
+    \frac{dD}{dt} = \left(1 - \frac{S}{S+D} p_{S}\right) \lambda S - d_{D} T_{x} D
+$$
+
+This model is implemented in the `StemCellModel` class.

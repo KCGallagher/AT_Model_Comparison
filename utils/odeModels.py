@@ -123,30 +123,3 @@ class StemCellModel(ODEModel):
         dudtVec[3] = 0  
         return (dudtVec)
     
-    
-class StemCellModel2(ODEModel):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.name = "StemCellModel"
-        self.paramDic = {**self.paramDic,
-                        'rR': log(2),
-                        'beta': 1e-6,
-                        'dR': 0.07,
-                        'rho': 0.0001,
-                        'phi': 0.01,
-                        'S0': 1000,
-                        'R0': 10,
-                        'P0': 29,
-                        'DMax': 1}
-        self.stateVars = ['S', 'R', 'P']
-
-    # The governing equations
-    def ModelEqns(self, t, uVec):
-        S, R, P, D = uVec
-        dudtVec = np.zeros_like(uVec)
-        dudtVec[0] = self.paramDic['rR'] * R - self.paramDic['dR'] * D * S  # Differentiated cells
-        dudtVec[1] = (R / (0.75 * self.paramDic['S0'])) * self.paramDic['beta'] * self.paramDic['rR'] * R  # Stem-like (drug resistant) cells
-        dudtVec[2] = self.paramDic['rho'] * S - self.paramDic['phi'] * P
-        dudtVec[3] = 0  
-        return (dudtVec)
-    
