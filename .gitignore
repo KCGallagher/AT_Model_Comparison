@@ -10,6 +10,7 @@
 
 # Miscellaneous
 **/.ipynb_checkpoints
+lotka_volterra/data/*
 
 # Inkscape Files
 paper_figures/
